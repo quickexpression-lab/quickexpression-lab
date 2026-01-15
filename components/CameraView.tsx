@@ -5,9 +5,10 @@ interface CameraViewProps {
   onCapture: (base64: string) => void;
   onClose: () => void;
   overlay: 'none' | 'thirds' | 'triangle';
+  onToggleOverlay?: (type: 'none' | 'thirds' | 'triangle') => void;
 }
 
-const CameraView: React.FC<CameraViewProps> = ({ onCapture, onClose, overlay }) => {
+const CameraView: React.FC<CameraViewProps> = ({ onCapture, onClose, overlay, onToggleOverlay }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [stream, setStream] = useState<MediaStream | null>(null);
@@ -52,7 +53,7 @@ const CameraView: React.FC<CameraViewProps> = ({ onCapture, onClose, overlay }) 
   };
 
   return (
-    <div className="fixed inset-0 z-[100] bg-black flex flex-col items-center justify-center">
+    <div className="fixed inset-0 z-[100] bg-black flex flex-col items-center justify-center font-space">
       <div className="relative w-full h-full flex items-center justify-center overflow-hidden">
         <video 
           ref={videoRef} 
@@ -61,47 +62,67 @@ const CameraView: React.FC<CameraViewProps> = ({ onCapture, onClose, overlay }) 
           className="w-full h-full object-cover"
         />
         
-        {/* Composition Overlays */}
-        <div className="absolute inset-0 pointer-events-none">
+        {/* Technical HUD Brackets */}
+        <div className="absolute inset-10 pointer-events-none z-10 border border-white/5">
+          <div className="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-indigo-500" />
+          <div className="absolute top-0 right-0 w-8 h-8 border-t-2 border-r-2 border-indigo-500" />
+          <div className="absolute bottom-0 left-0 w-8 h-8 border-b-2 border-l-2 border-indigo-500" />
+          <div className="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-indigo-500" />
+        </div>
+
+        {/* Live Precision Composition Guides */}
+        <div className="absolute inset-0 pointer-events-none z-20">
           {overlay === 'thirds' && (
-            <div className="grid grid-cols-3 grid-rows-3 w-full h-full opacity-30">
+            <div className="grid grid-cols-3 grid-rows-3 w-full h-full">
               {[...Array(9)].map((_, i) => (
-                <div key={i} className="border border-white/40 shadow-[0_0_1px_rgba(0,0,0,0.5)]" />
+                <div key={i} className="border border-white/20" />
               ))}
             </div>
           )}
           {overlay === 'triangle' && (
-            <svg className="w-full h-full stroke-white/30 opacity-40 shadow-[0_0_1px_rgba(0,0,0,0.5)]" preserveAspectRatio="none">
-              <line x1="0" y1="0" x2="100%" y2="100%" strokeWidth="1" />
-              <line x1="0" y1="100%" x2="25%" y2="25%" strokeWidth="1" />
-              <line x1="100%" y1="0" x2="75%" y2="75%" strokeWidth="1" />
+            <svg className="w-full h-full" preserveAspectRatio="none">
+              <line x1="0" y1="0" x2="100%" y2="100%" stroke="rgba(255,255,255,0.4)" strokeWidth="1" />
+              <line x1="0" y1="100%" x2="25%" y2="25%" stroke="rgba(255,255,255,0.4)" strokeWidth="1" />
+              <line x1="100%" y1="0" x2="75%" y2="75%" stroke="rgba(255,255,255,0.4)" strokeWidth="1" />
             </svg>
           )}
         </div>
 
-        {/* Global Controls */}
-        <div className="absolute top-10 left-10 right-10 flex justify-between items-center z-20">
-          <button onClick={onClose} className="w-14 h-14 glass flex items-center justify-center rounded-2xl text-white transition-all hover:scale-105 active:scale-90">
+        {/* HUD UI Controls */}
+        <div className="absolute top-10 left-10 right-10 flex justify-between items-center z-30">
+          <button onClick={onClose} className="w-14 h-14 bg-black/40 backdrop-blur-xl border border-white/10 flex items-center justify-center rounded-2xl text-white transition-all hover:scale-105 active:scale-90">
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M6 18L18 6M6 6l12 12"/></svg>
           </button>
           
-          <div className="px-6 py-3 glass rounded-2xl text-[10px] font-black uppercase tracking-[0.3em] text-white">
-            Live Precision View
+          <div className="flex gap-2">
+            {(['none', 'thirds', 'triangle'] as const).map(type => (
+              <button 
+                key={type}
+                onClick={() => onToggleOverlay?.(type)}
+                className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all border ${overlay === type ? 'bg-indigo-600 border-indigo-400 text-white' : 'bg-black/40 border-white/10 text-slate-400'}`}
+              >
+                {type}
+              </button>
+            ))}
           </div>
           
-          <div className="w-14 h-14" /> {/* Spacer */}
+          <div className="w-14 h-14" />
         </div>
 
-        <div className="absolute bottom-16 left-0 right-0 flex flex-col items-center gap-10 z-20">
-          <button 
-            onClick={capturePhoto}
-            className="group relative w-24 h-24 p-2 rounded-full border-2 border-white/50 active:scale-90 transition-all duration-300"
-          >
-            <div className="w-full h-full rounded-full bg-white transition-transform group-hover:scale-[0.9]" />
-            <div className="absolute -inset-4 border border-white/10 rounded-full animate-pulse" />
-          </button>
+        <div className="absolute bottom-16 left-0 right-0 flex flex-col items-center gap-10 z-30">
+          <div className="relative group">
+            <button 
+              onClick={capturePhoto}
+              className="relative w-24 h-24 p-2 rounded-full border-2 border-white/50 active:scale-90 transition-all duration-300 z-10"
+            >
+              <div className="w-full h-full rounded-full bg-white group-hover:bg-indigo-50" />
+            </button>
+            <div className="absolute -inset-4 border border-indigo-500/30 rounded-full animate-ping opacity-20" />
+          </div>
           
-          <p className="text-white/40 text-[10px] font-bold uppercase tracking-[0.2em]">Hold steady for optimal clarity</p>
+          <p className="text-white/80 text-[10px] font-black uppercase tracking-[0.4em] bg-black/40 px-4 py-2 rounded-full backdrop-blur-md border border-white/10">
+            Scanning Environment_A1
+          </p>
         </div>
       </div>
       <canvas ref={canvasRef} className="hidden" />

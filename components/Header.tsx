@@ -1,16 +1,30 @@
 
 import React, { useState } from 'react';
 
-const Header: React.FC = () => {
+interface HeaderProps {
+  onOpenAcademy: (topicId: string) => void;
+  onOpenPreset: (presetId: string) => void;
+}
+
+const Header: React.FC<HeaderProps> = ({ onOpenAcademy, onOpenPreset }) => {
   const [showPresets, setShowPresets] = useState(false);
+  const [showAcademy, setShowAcademy] = useState(false);
 
   const industryPresets = [
-    { name: 'Golden Hour', desc: 'Warm highlights & soft contrast' },
-    { name: 'Film Noir', desc: 'Dramatic B&W with deep shadows' },
-    { name: 'Cinematic Teal', desc: 'Classic teal/orange color grade' },
-    { name: 'High Key', desc: 'Bright, airy, and low contrast' },
-    { name: 'Muted Tones', desc: 'Desaturated, moody aesthetic' },
-    { name: 'Kodak Style', desc: 'Retro film-inspired warmth' },
+    { id: 'golden-hour', name: 'Golden Hour', desc: 'Warm highlights & soft contrast' },
+    { id: 'film-noir', name: 'Film Noir', desc: 'Dramatic B&W with deep shadows' },
+    { id: 'cinematic-teal', name: 'Cinematic Teal', desc: 'Classic teal/orange color grade' },
+    { id: 'high-key', name: 'High Key', desc: 'Bright, airy, and low contrast' },
+    { id: 'muted-tones', name: 'Muted Tones', desc: 'Desaturated, moody aesthetic' },
+    { id: 'kodak-style', name: 'Kodak Style', desc: 'Retro film-inspired warmth' },
+  ];
+
+  const academyTopics = [
+    { id: 'exposure', name: 'Exposure Triangle', desc: 'Aperture, Shutter, ISO' },
+    { id: 'composition', name: 'Composition Rules', desc: 'Thirds, Leading Lines, Framing' },
+    { id: 'lighting', name: 'Lighting Principles', desc: 'Quality, Direction, Intensity' },
+    { id: 'cropping', name: 'Cropping & Geometry', desc: 'Golden Triangle & Ratio' },
+    { id: 'technical', name: 'Technical Standards', desc: 'White Balance & Resolution' },
   ];
 
   return (
@@ -44,13 +58,41 @@ const Header: React.FC = () => {
           </div>
 
           <nav className="hidden md:flex items-center space-x-10">
-            {['Showcase', 'Academy'].map((item) => (
-              <span key={item} className="text-sm font-semibold text-slate-400 hover:text-white transition-colors cursor-pointer">
-                {item}
-              </span>
-            ))}
+            <span className="text-sm font-semibold text-slate-400 hover:text-white transition-colors cursor-pointer">
+              Showcase
+            </span>
+
+            {/* Academy Menu */}
+            <div className="relative" onMouseEnter={() => setShowAcademy(true)} onMouseLeave={() => setShowAcademy(false)}>
+              <button className="flex items-center gap-1.5 text-sm font-semibold text-slate-400 hover:text-white transition-colors cursor-pointer">
+                Academy
+                <svg className={`w-4 h-4 transition-transform duration-300 ${showAcademy ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+              {showAcademy && (
+                <div className="absolute top-full left-1/2 -translate-x-1/2 pt-4 w-72 animate-in fade-in zoom-in-95 duration-200">
+                  <div className="cyber-card rounded-2xl border border-white/10 p-4 shadow-2xl overflow-hidden bg-slate-950/90 backdrop-blur-2xl">
+                    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-500 to-indigo-500" />
+                    <h4 className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-3 px-2">Knowledge Base</h4>
+                    <div className="space-y-1">
+                      {academyTopics.map((topic) => (
+                        <button 
+                          key={topic.id} 
+                          onClick={() => { onOpenAcademy(topic.id); setShowAcademy(false); }}
+                          className="w-full text-left p-2.5 rounded-xl hover:bg-white/5 transition-all group/item"
+                        >
+                          <div className="text-xs font-bold text-slate-200 group-hover/item:text-indigo-400 transition-colors">{topic.name}</div>
+                          <div className="text-[10px] text-slate-500 mt-0.5">{topic.desc}</div>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
             
-            {/* Presets Menu with Dropdown */}
+            {/* Presets Menu */}
             <div className="relative" onMouseEnter={() => setShowPresets(true)} onMouseLeave={() => setShowPresets(false)}>
               <button className="flex items-center gap-1.5 text-sm font-semibold text-slate-400 hover:text-white transition-colors cursor-pointer">
                 Presets
@@ -61,12 +103,16 @@ const Header: React.FC = () => {
               
               {showPresets && (
                 <div className="absolute top-full left-1/2 -translate-x-1/2 pt-4 w-64 animate-in fade-in zoom-in-95 duration-200">
-                  <div className="glass rounded-2xl border border-white/10 p-4 shadow-2xl overflow-hidden">
+                  <div className="cyber-card rounded-2xl border border-white/10 p-4 shadow-2xl overflow-hidden bg-slate-950/90 backdrop-blur-2xl">
                     <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-indigo-500 to-purple-500" />
-                    <h4 className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-3 px-2">Standard Industry Grades</h4>
+                    <h4 className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-3 px-2">Industry Grades</h4>
                     <div className="space-y-1">
                       {industryPresets.map((preset) => (
-                        <button key={preset.name} className="w-full text-left p-2.5 rounded-xl hover:bg-white/5 transition-all group/item">
+                        <button 
+                          key={preset.id} 
+                          onClick={() => { onOpenPreset(preset.id); setShowPresets(false); }}
+                          className="w-full text-left p-2.5 rounded-xl hover:bg-white/5 transition-all group/item"
+                        >
                           <div className="text-xs font-bold text-slate-200 group-hover/item:text-indigo-400 transition-colors">{preset.name}</div>
                           <div className="text-[10px] text-slate-500 mt-0.5">{preset.desc}</div>
                         </button>
