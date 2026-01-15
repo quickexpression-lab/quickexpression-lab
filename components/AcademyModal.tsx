@@ -46,13 +46,15 @@ const academyData: Record<string, { title: string; content: string; keyPoints: s
       'Tight Cropping: Removing distractions to let the subject dominate the frame.'
     ]
   },
-  technical: {
-    title: 'Technical Standards',
-    content: 'Ensuring your files meet professional output standards for color accuracy and sharpness.',
+  // Mission / About Section
+  'about-mission': {
+    title: 'Vision & Mission',
+    content: 'ExpressCritiqueAI was born from a desire to bridge the gap between technical mastery and creative vision. Our mission is to provide an accessible, high-fidelity feedback loop that supports the lifelong journey of every photographer.',
     keyPoints: [
-      'White Balance: Adjusting for color temperature (warm/yellow vs cool/blue).',
-      'Resolution (PPI): Professional prints require 300 PPI for maximum detail.',
-      'Sharpening: Adding edge definition without creating halos or artificial artifacts.'
+      'Empowerment through Data: We provide technical insights to help you identify patterns in your own work, making self-critique a powerful engine for growth.',
+      'Democratizing Education: High-quality professional critique shouldn\'t be gate-kept. We aim to make foundational photography principles available to everyone instantly.',
+      'Collaborative Intelligence: Our AI is designed to serve as a companion to the human eye—honoring your unique style while offering a standard technical baseline.',
+      'Respectful Dialogue: We approach every analysis with diplomatic objectivity, focusing on the "How" and "Why" of a shot to encourage improvement without discouraging creativity.'
     ]
   },
   // Presets Knowledge
@@ -90,24 +92,6 @@ const academyData: Record<string, { title: string; content: string; keyPoints: s
       'Minimal Shadows: Multiple light sources or heavy diffusion wash out dark areas.',
       'Low Contrast: The tonal range is compressed toward the white/bright end of the histogram.',
       'Clean Backgrounds: Often uses pure white or light grey backdrops for a commercial look.'
-    ]
-  },
-  'muted-tones': {
-    title: 'Muted Tone Aesthetic',
-    content: 'A sophisticated look that reduces saturation and contrast to create a calm, vintage, or melancholic mood.',
-    keyPoints: [
-      'Desaturation: Colors are less "vibrant," shifting focus to texture and form.',
-      'Crushed Blacks: Lifting the black point of the image to create a "matte" or "faded" finish.',
-      'Limited Palette: Often restricts the image to 2-3 harmonious colors.'
-    ]
-  },
-  'kodak-style': {
-    title: 'Kodak Film Heritage',
-    content: 'Emulating the warm, nostalgic characteristics of classic film stocks like Portra or Ektar.',
-    keyPoints: [
-      'Film Grain: Adds an organic texture that mimics silver halide crystals.',
-      'Cyan Shadows: A specific chemical response in old film that adds depth to dark areas.',
-      'Dynamic Range Roll-off: Highlights fade into white gradually rather than "clipping" harshly like digital.'
     ]
   }
 };

@@ -1,7 +1,21 @@
 {
   "name": "ExpressCritiqueAI",
-  "description": "Professional photography critique app that analyzes images based on core composition, exposure, and lighting principles using Gemini AI.",
+  "short_name": "CritiqueAI",
+  "description": "Professional AI photography critique for mobile devices.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#020617",
+  "background_color": "#020617",
   "requestFramePermissions": [
     "camera"
+  ],
+  "icons": [
+    {
+      "src": "https://target.b-cdn.net/67ade02766ec3c00122e20b3/6c653634-2e9b-46cb-84ae-f93390c88599",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
   ]
 }
