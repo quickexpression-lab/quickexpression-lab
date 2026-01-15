@@ -1,0 +1,7 @@
+{
+  "name": "ExpressCritiqueAI",
+  "description": "Professional photography critique app that analyzes images based on core composition, exposure, and lighting principles using Gemini AI.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
